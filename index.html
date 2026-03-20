@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Supply Chain</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- ================================ -->
+    <!-- Navigation Bar -->
+    <!-- ================================ -->
+    <nav class="tab-bar">
+        <!-- Left: Status Dropdown -->
+        <div class="tab-bar-left">
+            <div class="status-dropdown">
+                <button class="status-btn" id="status-dropdown-btn">Status</button>
+                <div class="status-dropdown-content" id="status-dropdown-content">
+                    <div id="phase-banner">No game started yet.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center: Tab Buttons -->
+        <div class="tab-bar-center">
+            <button class="tab-btn active" data-tab="student">Student</button>
+            <button class="tab-btn" data-tab="instructor">Instructor</button>
+            <button class="tab-btn" data-tab="debug">Debug</button>
+        </div>
+
+        <!-- Right: Notification Dropdown -->
+        <div class="tab-bar-right">
+            <div class="notification-dropdown">
+                <button class="notification-btn" id="notification-dropdown-btn">
+                    🔔
+                    <span class="notification-badge hidden" id="notification-badge">0</span>
+                </button>
+                <div class="notification-dropdown-content" id="notification-dropdown-content">
+                    <div class="notification-header">Notifications</div>
+                    <ul id="notification-list">
+                        <!-- Filled by main.js -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================================ -->
+    <!-- Student Tab Content -->
+    <!-- ================================ -->
+    <div id="student-tab" class="tab-content active">
+        <!-- Current Contract Section -->
+        <section>
+            <h3>Current Contract</h3>
+            <div id="contract-summary">
+                No active contract. Negotiate terms before ordering.
+            </div>
+        </section>
+
+        <!-- Two-Column Layout: Demand History (Left) and Negotiation/Order (Right) -->
+        <div class="student-two-column">
+            <!-- Left Column: Demand History -->
+            <div class="student-left-column">
+                <section>
+                    <h3>Demand History</h3>
+                    <canvas id="demand-chart" width="600" height="250"></canvas>
+                    <p id="demand-history-summary">No demand history yet.</p>
+                    <table id="demand-history-table">
+                        <thead>
+                            <tr>
+                                <th>Period / Round</th>
+                                <th>Demand</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filled by main.js -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- Right Column: Negotiation and Order Decision -->
+            <div class="student-right-column">
+                <!-- Negotiation Section: Contract Proposal Form -->
+                <section id="negotiation-section">
+                    <h3>Negotiation</h3>
+                    <p>Propose contract terms to the supplier AI.</p>
+
+                    <!-- Initial Contract Proposal Form -->
+                    <form id="negotiate-form">
+                        <label>
+                            Wholesale Price (w):
+                            <input type="number" step="0.1" id="wholesale-input" value="18">
+                        </label><br><br>
+
+                        <label>
+                            Buyback Price (b):
+                            <input type="number" step="0.1" id="buyback-input" value="9">
+                        </label><br><br>
+
+                        <label>
+                            Cap Type:
+                            <select id="cap-type-input">
+                                <option value="fraction">fraction</option>
+                                <option value="unit">unit</option>
+                            </select>
+                        </label><br><br>
+
+                        <label>
+                            Cap Value (φ or B_max):
+                            <input type="number" step="0.1" id="cap-value-input" value="0.25">
+                        </label><br><br>
+
+                        <label>
+                            Contract Length (L):
+                            <input type="number" id="length-input" value="3" min="1">
+                        </label><br><br>
+
+                        <label>
+                            Contract Type:
+                            <select id="contract-type-input">
+                                <option value="buyback" selected>Buyback</option>
+                                <option value="revenue_sharing">Revenue Sharing</option>
+                                <option value="hybrid">Hybrid (Buyback + Share)</option>
+                            </select>
+                        </label><br><br>
+
+                        <label>
+                            Revenue Share (0 to 1):
+                            <input type="number" step="0.05" id="revenue-share-input" value="0.2">
+                        </label><br><br>
+
+                        <button type="submit">Submit Proposal</button>
+                    </form>
+                    
+                    <!-- Offer Display and Acceptance (shown when supplier makes an offer) -->
+                    <div id="counteroffer-section" class="hidden-section">
+                        <h4>Offer</h4>
+                        <div id="counteroffer-details"></div>
+                        <button id="accept-counter-btn">Accept Offer</button>
+                        <button id="reject-counter-btn">Reject Offer</button>
+                    </div>
+                    
+                    <!-- Negotiation Chat (shown when proposal is rejected) -->
+                    <div id="negotiation-chat-section" class="hidden-section">
+                        <h4>Negotiation Chat</h4>
+                        <div id="chat-messages" class="chat-messages-container">
+                            <!-- Chat messages will be added here by main.js -->
+                        </div>
+                        <form id="chat-form">
+                            <input type="text" id="chat-input" placeholder="Type your message..." class="chat-input">
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Order Decision Section: Place Orders and View Results -->
+                <section id="order-decision-section">
+                    <h3>Order Decision</h3>
+                    <p>Place an order for the current round under the active contract.</p>
+
+                    <!-- Order Form -->
+                    <form id="order-form">
+                        <label>
+                            Order Quantity (Q):
+                            <input type="number" id="order-quantity-input" value="500" min="0">
+                        </label>
+                        <button type="submit">Place Order</button>
+                    </form>
+
+                    <!-- Round Result Display -->
+                    <h4>Round Result</h4>
+                    <div id="round-result-card" class="round-result-card">
+                        No order placed yet.
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Game Summary Section (shown after game ends) -->
+        <section>
+            <h3>Game Summary</h3>
+            <p>Populated after the game ends (when the last round is played).</p>
+            <pre id="summary-output">No summary yet.</pre>
+        </section>
+    </div>
+
+    <!-- ================================ -->
+    <!-- Instructor Tab Content -->
+    <!-- ================================ -->
+    <div id="instructor-tab" class="tab-content">
+        <!-- Game Setup Section: Start New Game -->
+        <section>
+            <h3>Game Setup</h3>
+            <form id="game-setup-form">
+                <label>
+                    Demand Method:
+                    <select id="demand-method-input">
+                        <option value="bootstrap">Bootstrap (sample from history)</option>
+                        <option value="normal">Normal (μ, σ from history)</option>
+                    </select>
+                </label>
+
+                <label>
+                    Total Rounds:
+                    <input type="number" id="rounds-input" value="10" min="1" max="200">
+                </label>
+            </form>
+            <p></p> <!-- Spacing -->
+            <button id="start-game-btn">Start New Game</button>
+        </section>
+
+        <!-- End Game Early Section -->
+        <section>
+            <h3>End Game Early</h3>
+            <p>End the current game early and generate the game summary. This will mark the game as complete.</p>
+            <button id="end-game-early-btn">End Game Early</button>
+            <div id="end-game-early-output" class="end-game-output"></div>
+        </section>
+
+        <!-- Simulation Configuration Section: Economic Parameters and Demand History -->
+        <section>
+            <h3>Simulation Configuration</h3>
+
+            <button id="load-config-btn">Load Current Config</button>
+
+            <h4>Current Configuration</h4>
+            <pre id="config-output">Click "Load Current Config" to view settings.</pre>
+
+            <!-- Economic Parameters Update Form -->
+            <h4>Update Economic Parameters</h4>
+            <form id="update-econ-form">
+                <label>Retail Price (p):
+                    <input type="number" step="0.1" id="econ-retail" />
+                </label><br><br>
+
+                <label>Buyer Salvage Value (v_b):
+                    <input type="number" step="0.1" id="econ-buyer-salvage" />
+                </label><br><br>
+
+                <label>Supplier Salvage Value (v_s):
+                    <input type="number" step="0.1" id="econ-supplier-salvage" />
+                </label><br><br>
+
+                <label>Supplier Cost (c):
+                    <input type="number" step="0.1" id="econ-supplier-cost" />
+                </label><br><br>
+
+                <label>Return Shipping Buyer (c_ret):
+                    <input type="number" step="0.1" id="econ-return-ship" />
+                </label><br><br>
+
+                <label>Return Handling Supplier (h):
+                    <input type="number" step="0.1" id="econ-return-handle" />
+                </label><br><br>
+
+                <button type="submit">Save Economic Params</button>
+            </form>
+
+            <!-- Demand History Update -->
+            <h4>Update Demand History</h4>
+            <label>
+                <p>Enter one integer per line:</p>
+                <textarea id="history-input" rows="6" cols="30"></textarea>
+            </label><br><br>
+
+            <button id="save-history-btn">Save History</button>
+        </section>
+
+        <!-- Negotiation Configuration Section: AI Negotiation Settings -->
+        <section>
+            <h3>Negotiation Configuration</h3>
+
+            <button id="load-negotiation-config-btn">Load Current Negotiation Config</button>
+
+            <h4>Current Negotiation Configuration</h4>
+            <pre id="negotiation-config-output">Click "Load Current Negotiation Config" to view settings.</pre>
+
+            <!-- Negotiation Configuration Update Form -->
+            <h4>Update Negotiation Configuration</h4>
+            <form id="update-negotiation-config-form">
+                <label>Available Contract Types (select at least one):
+                    <div id="neg-config-contract-types-container" class="contract-types-container">
+                        <label class="contract-type-checkbox-label">
+                            <input type="checkbox" name="contract-type" value="buyback" id="neg-config-ct-buyback" />
+                            Buyback
+                        </label>
+                        <label class="contract-type-checkbox-label">
+                            <input type="checkbox" name="contract-type" value="revenue_sharing" id="neg-config-ct-revenue-sharing" />
+                            Revenue Sharing
+                        </label>
+                        <label class="contract-type-checkbox-label">
+                            <input type="checkbox" name="contract-type" value="hybrid" id="neg-config-ct-hybrid" />
+                            Hybrid
+                        </label>
+                    </div>
+                </label><br><br>
+
+                <label>Contract Length - Minimum:
+                    <input type="number" id="neg-config-length-min" min="1" />
+                </label><br><br>
+
+                <label>Contract Length - Maximum:
+                    <input type="number" id="neg-config-length-max" min="1" />
+                </label><br><br>
+
+                <label>Cap Type Allowed:
+                    <select id="neg-config-cap-type-allowed">
+                        <option value="fraction">Fraction Only</option>
+                        <option value="unit">Unit Only</option>
+                        <option value="both">Both</option>
+                    </select>
+                </label><br><br>
+
+                <label>Cap Value - Minimum:
+                    <input type="number" step="0.01" id="neg-config-cap-value-min" min="0" />
+                </label><br><br>
+
+                <label>Cap Value - Maximum:
+                    <input type="number" step="0.01" id="neg-config-cap-value-max" min="0" />
+                </label><br><br>
+
+                <label>Revenue Share - Minimum:
+                    <input type="number" step="0.01" id="neg-config-revenue-share-min" min="0" max="1" />
+                </label><br><br>
+
+                <label>Revenue Share - Maximum:
+                    <input type="number" step="0.01" id="neg-config-revenue-share-max" min="0" max="1" />
+                </label><br><br>
+
+                <label>System Prompt Template:
+                    <textarea id="neg-config-prompt-template" rows="15" cols="80" class="monospace-textarea"></textarea>
+                </label><br><br>
+
+                <button type="submit">Save Negotiation Config</button>
+            </form>
+        </section>
+
+        <!-- Game Summary Section (instructor view) -->
+        <section>
+            <h3>Game Summary</h3>
+            <p>Populated after the game ends (when the last round is played).</p>
+            <pre id="summary-output-instructor">No summary yet.</pre>
+        </section>
+    </div>
+
+    <!-- ================================ -->
+    <!-- Debug Tab Content -->
+    <!-- ================================ -->
+    <div id="debug-tab" class="tab-content">
+        <!-- Backend Health Check Section -->
+        <section>
+            <h3>Backend Health</h3>
+            <button id="health_button">Check Backend Health</button>
+            <pre id="health_output"></pre>
+        </section>
+
+        <!-- AI Provider Status Check Section -->
+        <section>
+            <h3>AI Provider Status</h3>
+            <button id="ai-status-button">Check AI Status</button>
+            <div id="ai-status-output" class="ai-status-output"></div>
+        </section>
+
+        <!-- Raw Game State Display (for debugging) -->
+        <section>
+            <h3>Raw Game State (Debug)</h3>
+            <p>Full JSON state for debugging or instructor view.</p>
+            <pre id="game-state-output">No game started yet.</pre>
+        </section>
+
+        <!-- Raw Round Data Display (for debugging) -->
+        <section>
+            <h3>Raw Round Data (Debug)</h3>
+            <pre id="order-output">No order placed yet.</pre>
+        </section>
+
+        <!-- Negotiation Response Display (for debugging) -->
+        <section>
+            <h3>Negotiation Response (Debug)</h3>
+            <pre id="negotiate-output">No negotiation yet.</pre>
+        </section>
+
+        <!-- Game Summary Section (debug view) -->
+        <section>
+            <h3>Game Summary</h3>
+            <p>Populated after the game ends (when the last round is played).</p>
+            <pre id="summary-output-debug">No summary yet.</pre>
+        </section>
+    </div>
+
+    <!-- ================================ -->
+    <!-- Scripts -->
+    <!-- ================================ -->
+    <!-- Main JavaScript file (loaded at end to ensure DOM is ready) -->
+    <script src="main.js"></script>
+</body>
+</html>
