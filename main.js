@@ -1279,7 +1279,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div><strong>Revenue Share:</strong> ${revenueShare}</div>
                 `;
                 document.getElementById("submitted-proposal").style.display = "block";
-            }  
+            } 
+            
+            const submittedSection = document.getElementById("submitted-proposal"); 
+            submittedSection.style.display = "block";
         
             try {
                 const data = await fetchJsonWithDetail(`${BASE_URL}/game/negotiate`, {
