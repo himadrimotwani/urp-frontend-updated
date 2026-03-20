@@ -1266,6 +1266,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 revenue_share: revenueShare,
             };
 
+            const submittedDetailsEl = document.getElementById("submitted-details");
+            if (submittedDetailsEl) 
+            {
+                submittedDetailsEl.innerHTML = `
+                    <div><strong>Wholesale Price (w):</strong> ${w}</div>
+                    <div><strong>Buyback Price (b):</strong> ${b}</div>
+                    <div><strong>Cap Type:</strong> ${capType}</div>
+                    <div><strong>Cap Value:</strong> ${capValue}</div>
+                    <div><strong>Contract Length (L):</strong> ${length}</div>
+                    <div><strong>Contract Type:</strong> ${contractType}</div>
+                    <div><strong>Revenue Share:</strong> ${revenueShare}</div>
+                `;
+                document.getElementById("submitted-proposal").style.display = "block";
+            }  
+        
             try {
                 const data = await fetchJsonWithDetail(`${BASE_URL}/game/negotiate`, {
                     method: "POST",
