@@ -1278,15 +1278,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div><strong>Contract Type:</strong> ${contractType}</div>
                     <div><strong>Revenue Share:</strong> ${revenueShare}</div>
                 `;
-                document.getElementById("submitted-proposal").style.display = "block";
-            } 
+            }
 
-            submittedSection.style.display = "block";
-            submittedSection.classList.remove("hidden-section");
-            
-            const submittedSection = document.getElementById("submitted-proposal"); 
-            submittedSection.style.display = "block";
-        
+            // ✅ Show submitted proposal
+            const submittedSection = document.getElementById("submitted-proposal");
+            if (submittedSection) {
+                submittedSection.style.display = "block";
+                submittedSection.classList.remove("hidden-section");
+            }
+
+            // 🔥 FORCE CHAT TO SHOW AFTER SUBMISSION (ADD HERE)
+            const chatSection = document.getElementById("negotiation-chat-section");
+            if (chatSection) {
+                chatSection.style.display = "block";
+                chatSection.classList.remove("hidden-section");
+            }
             try {
                 const data = await fetchJsonWithDetail(`${BASE_URL}/game/negotiate`, {
                     method: "POST",
