@@ -1280,6 +1280,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
                 document.getElementById("submitted-proposal").style.display = "block";
             } 
+
+            submittedSection.style.display = "block";
+            submittedSection.classList.remove("hidden-section");
             
             const submittedSection = document.getElementById("submitted-proposal"); 
             submittedSection.style.display = "block";
@@ -1459,6 +1462,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 orderOutput.textContent = JSON.stringify(data.round_output, null, 2);
 
                 renderGameState();
+
+                const submittedSection = document.getElementById("submitted-proposal");
+                if (submittedSection) {
+                    submittedSection.style.display = "block";
+                }
 
                 const ro = data.round_output || {};
                 const D = ro.realized_demand;
