@@ -737,7 +737,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Hide Negotiation section if there's an active contract
         if (negotiationSection) {
-            negotiationSection.style.display = hasActiveContract ? "none" : "block";
+            negotiationSection.style.display = "block";
         }
         
         // Hide proposal form if there's an ongoing negotiation (but keep chat/offer visible)
