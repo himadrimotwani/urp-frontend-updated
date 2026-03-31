@@ -284,6 +284,11 @@ pre {
     padding: 10px;
 }
 
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .chat-messages-container {
     height: 100%;
     overflow-y: auto;

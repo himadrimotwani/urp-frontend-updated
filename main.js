@@ -554,7 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!phaseBannerEl) return;
 
         const phase = computePhase(currentState);
-
+        const startGameBtn = document.getElementById("start-game-btn");
         const negotiateForm = document.getElementById("negotiate-form");
         const orderForm = document.getElementById("order-form");
 
@@ -572,6 +572,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     orderButton.disabled = true;
                     orderButton.title = "Start a game and negotiate a contract before ordering.";
                 }
+                if (startGameBtn) {
+                    startGameBtn.disabled = false;
+                    startGameBtn.title = "Start a new game.";
+                }
                 break;
             case "needs_contract":
                 phaseBannerEl.textContent = "No active contract. Negotiate terms before ordering.";
@@ -582,6 +586,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (orderButton) {
                     orderButton.disabled = true;
                     orderButton.title = "You must have an active contract before placing orders.";
+                }
+                if (startGameBtn) {
+                    startGameBtn.disabled = true;
+                    startGameBtn.title = "Game already started.";
                 }
                 break;
             case "active_contract":
@@ -594,6 +602,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     orderButton.disabled = false;
                     orderButton.title = "Enter Q for this round and place your order.";
                 }
+                 if (startGameBtn) {
+                    startGameBtn.disabled = true;
+                    startGameBtn.title = "Game already in progress.";
+                }
                 break;
             case "game_over":
                 phaseBannerEl.textContent = "Game is over. Start a new game to play again.";
@@ -604,6 +616,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (orderButton) {
                     orderButton.disabled = true;
                     orderButton.title = "Game is over. Start a new game to place orders.";
+                }
+                if (startGameBtn) {
+                    startGameBtn.disabled = false;
+                    startGameBtn.title = "Start a new game.";
                 }
                 break;
             default:
